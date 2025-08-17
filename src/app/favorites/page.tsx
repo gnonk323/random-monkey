@@ -16,7 +16,8 @@ export default async function Favorites() {
   const { data: favorites, error: favError } = await supabase
     .from("favorites")
     .select("image_url")
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
 
   if (favError) {
     console.error("Failed to fetch favorites:", favError);
