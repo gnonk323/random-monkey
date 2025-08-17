@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import FavoritesGallery from "@/components/FavoritesGallery";
 import type { MonkeyImageType } from "@/types/unsplash";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 export default async function Favorites() {
   const supabase = await createClient();
@@ -30,11 +31,16 @@ export default async function Favorites() {
   return (
     <div className="max-w-4xl mx-auto p-4">
       <div className="flex gap-2 items-center justify-between">
-        <div>
-          <h1 className="font-bold text-2xl">My Favorite Monkeys</h1>
+        <Link href={"/"} className="md:hidden block">
+          <button className="px-3 py-1 rounded-lg hover:bg-current/25 transition-colors cursor-pointer text-purple-500 font-semibold">
+            <ArrowLeft />
+          </button>
+        </Link>
+        <div className="md:text-left text-right">
+          <h1 className="font-bold md:text-2xl text-lg">My Favorite Monkeys</h1>
           <p className="text-sm text-neutral-500">{user.email}</p>
         </div>
-        <Link href={"/"}>
+        <Link href={"/"} className="md:block hidden">
           <button className="px-3 py-1 rounded-lg hover:bg-current/25 transition-colors cursor-pointer text-purple-500 font-semibold">
             Explore More Monkeys
           </button>

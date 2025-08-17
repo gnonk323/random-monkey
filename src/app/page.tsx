@@ -79,24 +79,24 @@ export default function Home() {
               disabled={!previousMonkey || previousMonkey.url === monkeyImage?.url}
               className="h-full px-3 rounded-lg cursor-pointer not-disabled:hover:bg-current/25 transition-colors disabled:cursor-default disabled:opacity-50"
             >
-              <Undo2 size={18} />
+              <Undo2 size={16} />
             </button>
             {!user ? (
               <GoogleLoginButton />
             ) : (
               <Link href={"/favorites"}>
-                <button className="flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer hover:bg-current/25 transition-colors">
-                  <Star size={18} />
-                  Favorites
+                <button className="flex items-center gap-2 px-3 py-2 h-full rounded-lg border cursor-pointer hover:bg-current/25 transition-colors text-sm md:text-base">
+                  <Star size={16} />
+                  <p className="hidden md:inline-block">Favorites</p>
                 </button>
               </Link>
             )}
             <button
-              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 transition-all hover:-translate-y-1 font-extrabold cursor-pointer"
+              className="flex items-center gap-2 px-3 py-2 h-full rounded-lg bg-purple-600 hover:bg-purple-500 transition-all hover:-translate-y-1 font-extrabold cursor-pointer text-sm md:text-base"
               disabled={loadingMonkey}
               onClick={fetchMonkey}
             >
-              <Shuffle size={18} strokeWidth={3} />
+              <Shuffle size={16} strokeWidth={3} />
               {loadingMonkey ? "Loading..." : "New Monkey!"}
             </button>
           </div>
