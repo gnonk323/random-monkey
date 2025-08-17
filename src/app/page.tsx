@@ -35,12 +35,12 @@ export default function Home() {
 
   return (
     <div className="font-sans">
-      <main className="flex flex-col gap-6 items-center justify-center h-screen">
+      <main className="flex flex-col gap-6 items-center justify-center h-screen p-4">
         {monkeyImageUrl ? (
           <img
             src={monkeyImageUrl}
             alt="Random monkey"
-            className="rounded-lg max-h-2/3"
+            className="rounded-lg md:max-h-2/3 max-h-1/3"
           />
         ) : (
           <div className="p-20 rounded-lg outline outline-dashed">
