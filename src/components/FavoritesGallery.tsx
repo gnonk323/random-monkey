@@ -7,7 +7,7 @@ export default function FavoritesGallery({ monkeyImages }: { monkeyImages: Monke
     {monkeyImages.length > 0 ? (
       <div className="columns-1 md:columns-2 gap-4">
         {monkeyImages.map((monkeyImage: MonkeyImageType) => (
-          <div key={monkeyImage.url} className="mb-4 break-inside-avoid">
+          <div key={monkeyImage.url} className="mb-2 break-inside-avoid">
             <GalleryMonkeyImage monkeyImage={monkeyImage} />
           </div>
         ))}

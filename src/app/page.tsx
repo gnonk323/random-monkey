@@ -92,7 +92,7 @@ export default function Home() {
               </Link>
             )}
             <button
-              className="flex items-center gap-2 px-3 py-2 h-full rounded-lg bg-purple-600 hover:bg-purple-500 transition-all hover:-translate-y-1 font-extrabold cursor-pointer text-sm md:text-base"
+              className="flex items-center gap-2 px-3 py-2 h-full rounded-lg bg-purple-600 hover:bg-purple-500 transition-all font-extrabold cursor-pointer text-sm md:text-base"
               disabled={loadingMonkey}
               onClick={fetchMonkey}
             >

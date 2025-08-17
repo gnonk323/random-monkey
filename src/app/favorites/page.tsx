@@ -30,7 +30,7 @@ export default async function Favorites() {
 
   return (
     <div className="max-w-4xl mx-auto p-4">
-      <div className="flex gap-2 items-center justify-between">
+      <div className="flex gap-2 items-center justify-between mb-4">
         <Link href={"/"} className="md:hidden block">
           <button className="px-3 py-1 rounded-lg hover:bg-current/25 transition-colors cursor-pointer text-purple-500 font-semibold">
             <ArrowLeft />
@@ -46,7 +46,6 @@ export default async function Favorites() {
           </button>
         </Link>
       </div>
-      <br />
       <FavoritesGallery monkeyImages={monkeyImages} />
     </div>
   );
