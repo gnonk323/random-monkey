@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import type { MonkeyImageType } from "@/types/unsplash";
 import FavoriteToggle from "./FavoriteToggle";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 export function MonkeyImage({ monkeyImage, authenticated }: { monkeyImage: MonkeyImageType, authenticated: boolean }) {
   return (
