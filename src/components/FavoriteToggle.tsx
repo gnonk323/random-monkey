@@ -4,6 +4,7 @@ import { Star } from "lucide-react";
 import axios from "axios";
 import { useState } from "react";
 import type { MonkeyImageType } from "@/types/unsplash";
+import { supabase } from "@/lib/supabase/client";
 
 export default function FavoriteToggle({ monkeyImage }: { monkeyImage: MonkeyImageType }) {
   const [isFavorite, setIsFavorite] = useState(monkeyImage.favorite);

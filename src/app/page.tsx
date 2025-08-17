@@ -1,7 +1,7 @@
 "use client"
 
-import { Shuffle, UserRound, Star } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Shuffle, UserRound, Star, LoaderCircle, Undo2 } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import GoogleLoginButton from "@/components/GoogleLoginButton";
 import { supabase } from "@/lib/supabase/client";
@@ -15,6 +15,8 @@ export default function Home() {
   const [monkeyImage, setMonkeyImage] = useState<MonkeyImageType>();
   const [monkeyError, setMonkeyError] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [previousMonkey, setPreviousMonkey] = useState<MonkeyImageType | null>(null);
+  const hasInitialized = useRef(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(res => setUser(res.data.user));
@@ -31,7 +33,10 @@ export default function Home() {
     try {
       const response = await axios.get("/api/monkey");
       if (response.data.url) {
-        setMonkeyImage(response.data)
+        setMonkeyImage(prev => {
+          setPreviousMonkey(prev || null);
+          return response.data
+        })
       } else {
         console.error("Unexpected error fetching monkey :(", response.data.error);
         setMonkeyError("There was a problem getting a new monkey :(")
@@ -50,8 +55,11 @@ export default function Home() {
   }
 
   useEffect(() => {
-    fetchMonkey()
-  }, []);
+    if (!monkeyImage && !hasInitialized.current) {
+      hasInitialized.current = true;
+      fetchMonkey();
+    }
+  }, [monkeyImage]);
 
   return (
     <div className="font-sans">
@@ -59,14 +67,23 @@ export default function Home() {
         <div className="h-full flex flex-col items-center justify-center gap-4">
           {user && <p className="text-sm">Logged in as {user.email} <span className="underline cursor-pointer" onClick={handleLogout}>Log out</span></p>}
           {monkeyImage ? (
-            <MonkeyImage monkeyImage={monkeyImage} />
+            <MonkeyImage monkeyImage={monkeyImage} authenticated={!!user} />
           ) : (
-            <div className="p-20 rounded-lg outline outline-dashed">
-              No monkey here...
+            <div className="p-20">
+              <LoaderCircle className="animate-spin" />
             </div>
           )}
           <div className="flex items-center gap-4">
-            {!user ? <GoogleLoginButton /> : (
+            <button
+              onClick={() => { if (previousMonkey) setMonkeyImage(previousMonkey) }}
+              disabled={!previousMonkey || previousMonkey.url === monkeyImage?.url}
+              className="h-full px-3 rounded-lg cursor-pointer not-disabled:hover:bg-current/25 transition-colors disabled:cursor-default disabled:opacity-50"
+            >
+              <Undo2 size={18} />
+            </button>
+            {!user ? (
+              <GoogleLoginButton />
+            ) : (
               <Link href={"/favorites"}>
                 <button className="flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer hover:bg-current/25 transition-colors">
                   <Star size={18} />
@@ -84,7 +101,7 @@ export default function Home() {
             </button>
           </div>
           {monkeyError && (
-            <div className="px-2 py-1 rounded-lg outline-2 outline-red-500 bg-red-500/30 text-red-500">
+            <div className="px-2 py-1 rounded-lg outline outline-red-500 bg-red-500/30 text-red-500">
               {monkeyError}
             </div>
           )}

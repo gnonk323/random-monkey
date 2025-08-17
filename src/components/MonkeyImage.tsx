@@ -1,7 +1,7 @@
 import type { MonkeyImageType } from "@/types/unsplash";
 import FavoriteToggle from "./FavoriteToggle";
 
-export function MonkeyImage({ monkeyImage }: { monkeyImage: MonkeyImageType }) {
+export function MonkeyImage({ monkeyImage, authenticated }: { monkeyImage: MonkeyImageType, authenticated: boolean }) {
   return (
     <div className="relative group inline-block">
       <img
@@ -9,7 +9,7 @@ export function MonkeyImage({ monkeyImage }: { monkeyImage: MonkeyImageType }) {
         alt="Random monkey"
         className="rounded-lg max-h-[70vh] h-auto w-auto"
       />
-      <FavoriteToggle key={monkeyImage.url} monkeyImage={monkeyImage} />
+      {authenticated && <FavoriteToggle key={monkeyImage.url} monkeyImage={monkeyImage} />}
     </div>
   );
 }

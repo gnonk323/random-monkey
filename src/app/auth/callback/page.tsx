@@ -22,7 +22,7 @@ export default function AuthCallback() {
 
   return (
     <div className="flex items-center justify-center h-32">
-      Signing you in...
+      <p className="animate-bounce">Signing you in...</p>
     </div>
   );
 }

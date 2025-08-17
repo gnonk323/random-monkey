@@ -35,7 +35,7 @@ export default async function Favorites() {
           <p className="text-sm text-neutral-500">{user.email}</p>
         </div>
         <Link href={"/"}>
-          <button className="px-3 py-1 rounded-lg border hover:bg-current/25 transition-colors cursor-pointer">
+          <button className="px-3 py-1 rounded-lg hover:bg-current/25 transition-colors cursor-pointer text-purple-500 font-semibold">
             Explore More Monkeys
           </button>
         </Link>
