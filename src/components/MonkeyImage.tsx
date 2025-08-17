@@ -7,7 +7,7 @@ import { motion } from "motion/react"
 
 export function MonkeyImage({ monkeyImage, authenticated }: { monkeyImage: MonkeyImageType, authenticated: boolean }) {
   return (
-    <div className="relative flex justify-center items-center h-[70vh]">
+    <div className="relative flex justify-center items-center h-[70vh] group">
       <motion.img
         key={`image-${monkeyImage.url}`}
         src={monkeyImage.url}

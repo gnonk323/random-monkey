@@ -20,7 +20,7 @@ export default function FavoriteToggle({ monkeyImage }: { monkeyImage: MonkeyIma
   return (
     <button
       onClick={toggleFavorite}
-      className={`absolute top-2 right-2 ${!isFavorite && "md:opacity-0 group-hover:opacity-100"} transition-opacity cursor-pointer`}
+      className={`absolute top-4 right-4 ${!isFavorite && "md:opacity-0 group-hover:opacity-100"} transition-opacity cursor-pointer`}
     >
       <Star size={24} className={`text-yellow-500 ${isFavorite && "fill-current"}`} />
     </button>
