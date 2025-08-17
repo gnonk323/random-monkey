@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import type { MonkeyImageType } from "@/types/unsplash";
 import FavoriteToggle from "./FavoriteToggle";
 import { motion } from "framer-motion";
@@ -19,6 +18,7 @@ export function MonkeyImage({ monkeyImage, authenticated }: { monkeyImage: Monke
   );
 }
 
+/* eslint-disable @next/next/no-img-element */
 export function GalleryMonkeyImage({ monkeyImage }: { monkeyImage: MonkeyImageType }) {
   return (
     <div className="relative group inline-block w-full">
