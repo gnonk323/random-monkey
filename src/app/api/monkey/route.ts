@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 import type { UnsplashPhoto } from "@/types/unsplash";
+import { createClient } from "@/lib/supabase/server";
 
 const UNSPLASH_KEY = process.env.UNSPLASH_ACCESS_KEY;
 const CACHE_TTL = 1000 * 60 * 60; // 1 hour
@@ -42,7 +43,22 @@ async function getRandomMonkey(): Promise<string> {
 export async function GET() {
   try {
     const url = await getRandomMonkey();
-    return NextResponse.json({ url });
+
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser()
+
+    let isFavorite = false;
+    if (user) {
+      const { data: favorites } = await supabase
+        .from("favorites")
+        .select("image_url")
+        .eq("user_id", user.id)
+        .eq("image_url", url);
+      
+      isFavorite = !!(favorites && favorites.length > 0);
+    }
+
+    return NextResponse.json({ url, favorite: isFavorite });
   } catch (err) {
     return NextResponse.json({ error: err }, { status: 500 });
   }

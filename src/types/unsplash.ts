@@ -7,3 +7,8 @@ export type UnsplashPhoto = {
     thumb: string;
   };
 };
+
+export type MonkeyImageType = {
+  url: string
+  favorite: boolean
+}

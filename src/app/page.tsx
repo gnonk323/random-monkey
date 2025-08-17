@@ -1,14 +1,29 @@
 "use client"
 
-import Image from "next/image";
-import { Shuffle, Album } from "lucide-react";
+import { Shuffle, UserRound, Star } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import GoogleLoginButton from "@/components/GoogleLoginButton";
+import { supabase } from "@/lib/supabase/client";
+import type { User } from "@supabase/supabase-js";
+import Link from "next/link";
+import { MonkeyImage } from "@/components/MonkeyImage";
+import type { MonkeyImageType } from "@/types/unsplash";
 
 export default function Home() {
   const [loadingMonkey, setLoadingMonkey] = useState(false);
-  const [monkeyImageUrl, setMonkeyImageUrl] = useState<string>();
+  const [monkeyImage, setMonkeyImage] = useState<MonkeyImageType>();
   const [monkeyError, setMonkeyError] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(res => setUser(res.data.user));
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
   async function fetchMonkey() {
     setLoadingMonkey(true)
@@ -16,7 +31,7 @@ export default function Home() {
     try {
       const response = await axios.get("/api/monkey");
       if (response.data.url) {
-        setMonkeyImageUrl(response.data.url)
+        setMonkeyImage(response.data)
       } else {
         console.error("Unexpected error fetching monkey :(", response.data.error);
         setMonkeyError("There was a problem getting a new monkey :(")
@@ -29,6 +44,11 @@ export default function Home() {
     }
   }
 
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    setUser(null);
+  }
+
   useEffect(() => {
     fetchMonkey()
   }, []);
@@ -37,25 +57,32 @@ export default function Home() {
     <div className="font-sans">
       <main className="flex flex-col gap-6 items-center justify-center h-screen px-4 py-16">
         <div className="h-full flex flex-col items-center justify-center gap-4">
-          {monkeyImageUrl ? (
-            <img
-              src={monkeyImageUrl}
-              alt="Random monkey"
-              className="rounded-lg max-h-2/3"
-            />
+          {user && <p className="text-sm">Logged in as {user.email} <span className="underline cursor-pointer" onClick={handleLogout}>Log out</span></p>}
+          {monkeyImage ? (
+            <MonkeyImage monkeyImage={monkeyImage} />
           ) : (
             <div className="p-20 rounded-lg outline outline-dashed">
               No monkey here...
             </div>
           )}
-          <button
-            className="flex items-center gap-2 px-4 py-3 rounded-lg bg-purple-600 hover:bg-purple-500 transition-all hover:-translate-y-1 font-extrabold cursor-pointer"
-            disabled={loadingMonkey}
-            onClick={fetchMonkey}
-          >
-            <Shuffle />
-            {loadingMonkey ? "Loading..." : "New Monkey!"}
-          </button>
+          <div className="flex items-center gap-4">
+            {!user ? <GoogleLoginButton /> : (
+              <Link href={"/favorites"}>
+                <button className="flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer hover:bg-current/25 transition-colors">
+                  <Star size={18} />
+                  Favorites
+                </button>
+              </Link>
+            )}
+            <button
+              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 transition-all hover:-translate-y-1 font-extrabold cursor-pointer"
+              disabled={loadingMonkey}
+              onClick={fetchMonkey}
+            >
+              <Shuffle size={18} strokeWidth={3} />
+              {loadingMonkey ? "Loading..." : "New Monkey!"}
+            </button>
+          </div>
           {monkeyError && (
             <div className="px-2 py-1 rounded-lg outline-2 outline-red-500 bg-red-500/30 text-red-500">
               {monkeyError}
@@ -72,7 +99,7 @@ export default function Home() {
               <p className="text-sm group-hover:underline">GitHub</p>
             </a>
             <div className="flex gap-2 items-center group">
-              <Album size={16} />
+              <UserRound size={16} />
               <a href="https://gustave-montana.vercel.app/" className="text-sm group-hover:underline">Portfolio</a>
             </div>
           </div>
