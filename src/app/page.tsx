@@ -69,7 +69,7 @@ export default function Home() {
           {monkeyImage ? (
             <MonkeyImage monkeyImage={monkeyImage} authenticated={!!user} />
           ) : (
-            <div className="p-20">
+            <div className="h-[70vh] flex items-center justify-center">
               <LoaderCircle className="animate-spin" />
             </div>
           )}

@@ -7,15 +7,15 @@ import { motion } from "motion/react"
 
 export function MonkeyImage({ monkeyImage, authenticated }: { monkeyImage: MonkeyImageType, authenticated: boolean }) {
   return (
-    <div className="relative group inline-block">
+    <div className="relative flex justify-center items-center h-[70vh]">
       <motion.img
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
         key={`image-${monkeyImage.url}`}
         src={monkeyImage.url}
         alt="Random monkey"
-        className="rounded-lg max-h-[70vh] h-auto w-auto"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
+        className="max-h-full max-w-full rounded-lg object-contain"
       />
       {authenticated && <FavoriteToggle key={`button-${monkeyImage.url}`} monkeyImage={monkeyImage} />}
     </div>
