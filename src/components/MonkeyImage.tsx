@@ -1,14 +1,18 @@
+/* eslint-disable @next/next/no-img-element */
+"use client"
+
 import type { MonkeyImageType } from "@/types/unsplash";
 import FavoriteToggle from "./FavoriteToggle";
-import { motion } from "framer-motion";
+import { motion } from "motion/react"
 
 export function MonkeyImage({ monkeyImage, authenticated }: { monkeyImage: MonkeyImageType, authenticated: boolean }) {
   return (
     <div className="relative group inline-block">
       <motion.img
-        key={`image-${monkeyImage.url}`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        key={`image-${monkeyImage.url}`}
         src={monkeyImage.url}
         alt="Random monkey"
         className="rounded-lg max-h-[70vh] h-auto w-auto"
@@ -18,7 +22,6 @@ export function MonkeyImage({ monkeyImage, authenticated }: { monkeyImage: Monke
   );
 }
 
-/* eslint-disable @next/next/no-img-element */
 export function GalleryMonkeyImage({ monkeyImage }: { monkeyImage: MonkeyImageType }) {
   return (
     <div className="relative group inline-block w-full">
