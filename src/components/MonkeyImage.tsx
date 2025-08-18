@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
 
-import type { MonkeyImageType } from "@/types/unsplash";
+import type { MonkeyImageType } from "@/types/types";
 import FavoriteToggle from "./FavoriteToggle";
 import { motion } from "motion/react"
 

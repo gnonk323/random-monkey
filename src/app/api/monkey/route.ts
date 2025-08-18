@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
-import type { UnsplashPhoto } from "@/types/unsplash";
+import type { UnsplashPhoto } from "@/types/types";
 import { createClient } from "@/lib/supabase/server";
 
 const UNSPLASH_KEY = process.env.UNSPLASH_ACCESS_KEY;
 const CACHE_TTL = 1000 * 60 * 60; // 1 hour
 
-let cachedMonkeys: string[] = [];
+let cachedMonkeys: { id: string; url: string }[] = [];
 let lastFetchTime = 0;
 
-async function getRandomMonkey(): Promise<string> {
+async function getRandomMonkey(): Promise<{ id: string; url: string }> {
   const now = Date.now();
 
   if (cachedMonkeys.length === 0 || now - lastFetchTime > CACHE_TTL) {
@@ -23,7 +23,10 @@ async function getRandomMonkey(): Promise<string> {
         }
       );
 
-      cachedMonkeys = res.data.map((img) => img.urls.regular);
+      cachedMonkeys = res.data.map((img) => ({
+        id: img.id,
+        url: img.urls.regular,
+      }));
       lastFetchTime = now;
 
       console.log(`[Monkey API] Fetched ${cachedMonkeys.length} new monkey images from Unsplash.`);
@@ -42,7 +45,7 @@ async function getRandomMonkey(): Promise<string> {
 
 export async function GET() {
   try {
-    const url = await getRandomMonkey();
+    const { id, url } = await getRandomMonkey();
 
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser()
@@ -53,12 +56,12 @@ export async function GET() {
         .from("favorites")
         .select("image_url")
         .eq("user_id", user.id)
-        .eq("image_url", url);
+        .eq("image_id", id);
       
       isFavorite = !!(favorites && favorites.length > 0);
     }
 
-    return NextResponse.json({ url, favorite: isFavorite });
+    return NextResponse.json({ user, id, url, favorite: isFavorite });
   } catch (err) {
     return NextResponse.json({ error: err }, { status: 500 });
   }

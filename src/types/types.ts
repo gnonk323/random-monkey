@@ -1,4 +1,5 @@
 export type UnsplashPhoto = {
+  id: string;
   urls: {
     raw: string;
     full: string;
@@ -9,6 +10,7 @@ export type UnsplashPhoto = {
 };
 
 export type MonkeyImageType = {
+  id: string
   url: string
   favorite: boolean
 }

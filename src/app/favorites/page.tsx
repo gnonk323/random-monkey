@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import FavoritesGallery from "@/components/FavoritesGallery";
-import type { MonkeyImageType } from "@/types/unsplash";
+import type { MonkeyImageType } from "@/types/types";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
@@ -15,7 +15,7 @@ export default async function Favorites() {
 
   const { data: favorites, error: favError } = await supabase
     .from("favorites")
-    .select("image_url")
+    .select("image_url, image_id")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
@@ -25,6 +25,7 @@ export default async function Favorites() {
   }
 
   const monkeyImages: MonkeyImageType[] = (favorites || []).map(fav => ({
+    id: fav.image_id,
     url: fav.image_url,
     favorite: true,
   }));

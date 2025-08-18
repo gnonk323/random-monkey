@@ -3,14 +3,17 @@
 import { Star } from "lucide-react";
 import axios from "axios";
 import { useState } from "react";
-import type { MonkeyImageType } from "@/types/unsplash";
+import type { MonkeyImageType } from "@/types/types";
 
 export default function FavoriteToggle({ monkeyImage }: { monkeyImage: MonkeyImageType }) {
   const [isFavorite, setIsFavorite] = useState(monkeyImage.favorite);
 
   const toggleFavorite = async () => {
     try {
-      const response = await axios.post("/api/favorites", { image_url: monkeyImage.url });
+      const response = await axios.post("/api/favorites", {
+        image_url: monkeyImage.url,
+        image_id: monkeyImage.id,
+      });
       if (response.data.success) setIsFavorite(response.data.action === "added");
     } catch (error) {
       console.error("Failed to add/remove favorite", error);

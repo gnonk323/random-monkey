@@ -1,4 +1,4 @@
-import type { MonkeyImageType } from "@/types/unsplash";
+import type { MonkeyImageType } from "@/types/types";
 import { GalleryMonkeyImage } from "./MonkeyImage";
 
 export default function FavoritesGallery({ monkeyImages }: { monkeyImages: MonkeyImageType[] }) {

@@ -3,17 +3,17 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
-  const { image_url } = await req.json();
+  const { image_url, image_id } = await req.json();
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!image_url) return NextResponse.json({ error: "Missing image_url" }, { status: 400 });
+  if (!image_url || !image_id) return NextResponse.json({ error: "Missing image_url or image_id" }, { status: 400 });
 
   const { data: existing, error: fetchError } = await supabase
     .from("favorites")
     .select("*")
     .eq("user_id", user.id)
-    .eq("image_url", image_url)
+    .eq("image_id", image_id)
     .single();
 
   if (fetchError && fetchError.code !== "PGRST116") {
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
   } else {
     const { error: insertError } = await supabase
       .from("favorites")
-      .insert({ user_id: user.id, image_url });
+      .insert({ user_id: user.id, image_url, image_id });
 
     if (insertError) return NextResponse.json({ error: insertError.message }, { status: 500 });
     return NextResponse.json({ success: true, action: "added" });

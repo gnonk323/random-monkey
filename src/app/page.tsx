@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { MonkeyImage } from "@/components/MonkeyImage";
-import type { MonkeyImageType } from "@/types/unsplash";
+import type { MonkeyImageType } from "@/types/types";
 
 export default function Home() {
   const [loadingMonkey, setLoadingMonkey] = useState(false);
@@ -53,6 +53,10 @@ export default function Home() {
     await supabase.auth.signOut();
     setUser(null);
   }
+
+  useEffect(() => {
+    console.log(monkeyImage)
+  }, [monkeyImage]);
 
   useEffect(() => {
     if (!monkeyImage && !hasInitialized.current) {
