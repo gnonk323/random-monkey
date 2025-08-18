@@ -66,13 +66,13 @@ export default function Home() {
       <main className="flex flex-col gap-6 items-center justify-center h-screen px-4 py-16">
         <div className="h-full flex flex-col items-center justify-center gap-4">
           {user && <p className="text-sm">Logged in as {user.email} <span className="underline cursor-pointer" onClick={handleLogout}>Log out</span></p>}
-          {monkeyImage ? (
-            <MonkeyImage monkeyImage={monkeyImage} authenticated={!!user} />
-          ) : (
-            <div className="h-[70vh] flex items-center justify-center">
+          <div className="h-[70vh] flex items-center justify-center">
+            {monkeyImage ? (
+              <MonkeyImage monkeyImage={monkeyImage} authenticated={!!user} />
+            ) : (
               <LoaderCircle className="animate-spin" />
-            </div>
-          )}
+            )}
+          </div>
           <div className="flex items-center gap-4">
             <button
               onClick={() => { if (previousMonkey) setMonkeyImage(previousMonkey) }}
