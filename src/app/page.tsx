@@ -55,10 +55,6 @@ export default function Home() {
   }
 
   useEffect(() => {
-    console.log(monkeyImage)
-  }, [monkeyImage]);
-
-  useEffect(() => {
     if (!monkeyImage && !hasInitialized.current) {
       hasInitialized.current = true;
       fetchMonkey();
