@@ -18,7 +18,7 @@ async function getRandomMonkey(): Promise<{ id: string; url: string }> {
       const res = await axios.get<UnsplashPhoto[]>(
         `https://api.unsplash.com/photos/random`,
         {
-          params: { query: "monkey", count: 50 },
+          params: { query: "monkey", count: 30 },
           headers: { "Accept-Version": "v1", Authorization: `Client-ID ${UNSPLASH_KEY}` },
         }
       );
