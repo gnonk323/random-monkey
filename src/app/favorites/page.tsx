@@ -1,34 +1,21 @@
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 import FavoritesGallery from "@/components/FavoritesGallery";
-import type { MonkeyImageType } from "@/types/types";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { Suspense } from "react";
+import { LoaderCircle } from "lucide-react";
 
 export default async function Favorites() {
   const supabase = await createClient();
-  
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
   if (userError || !user) {
     redirect("/");
   }
-
-  const { data: favorites, error: favError } = await supabase
-    .from("favorites")
-    .select("image_url, image_id")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false });
-
-  if (favError) {
-    console.error("Failed to fetch favorites:", favError);
-    return <div>Error loading favorites</div>;
-  }
-
-  const monkeyImages: MonkeyImageType[] = (favorites || []).map(fav => ({
-    id: fav.image_id,
-    url: fav.image_url,
-    favorite: true,
-  }));
 
   return (
     <div className="max-w-4xl mx-auto p-4">
@@ -48,7 +35,16 @@ export default async function Favorites() {
           </button>
         </Link>
       </div>
-      <FavoritesGallery monkeyImages={monkeyImages} />
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center gap-2">
+            <LoaderCircle className="animate-spin" />
+            <p>Loading favorites...</p>
+          </div>
+        }
+      >
+        <FavoritesGallery />
+      </Suspense>
     </div>
   );
 }

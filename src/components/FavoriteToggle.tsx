@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Star } from "lucide-react";
 import axios from "axios";
@@ -10,7 +10,7 @@ export default function FavoriteToggle({ monkeyImage }: { monkeyImage: MonkeyIma
 
   const toggleFavorite = async () => {
     try {
-      const response = await axios.post("/api/favorites", {
+      const response = await axios.post("/api/favorites/", {
         image_url: monkeyImage.url,
         image_id: monkeyImage.id,
       });
@@ -18,7 +18,7 @@ export default function FavoriteToggle({ monkeyImage }: { monkeyImage: MonkeyIma
     } catch (error) {
       console.error("Failed to add/remove favorite", error);
     }
-  }
+  };
 
   return (
     <button
